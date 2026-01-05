@@ -1,0 +1,13 @@
+integrate_mission_plans:
+  description: >
+    Integrate the rover exploration plan and the drone survey plan into a single
+    coordinated mission strategy. Analyze both plans to identify and resolve
+    potential conflicts in timing, location usage, or resource allocation.
+    Ensure that the final plan is consistent with mission objectives and
+    operational constraints.
+  expected_output: >
+    A unified mission plan presented in a clear and well-structured format,
+    describing the coordinated sequence of rover and drone activities. The
+    output should be suitable for final review and communication, for example
+    as a Markdown-formatted mission strategy.
+  agent: mission_integration

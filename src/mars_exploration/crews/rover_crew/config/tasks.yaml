@@ -1,0 +1,51 @@
+clean_mission_for_rovers:
+  description: >
+    You will receive a mission summary in JSON format. Your task is to extract and return
+    only the information relevant to surface rover operations. Keep exclusively the
+    scientific goals that can be executed by rovers, meaning goals that target surface
+    locations identified by node IDs and require ground-based interaction such as sampling,
+    measurement, or surface imaging. Remove any goals that are aerial-only or orbital-only.
+    For each retained goal, include its id, description, target_nodes, terrain, and priority,
+    normalizing priority values to exactly one of: high, medium, or low. For constraints,
+    always include rover-specific constraints and always include any global constraint that
+    applies to all agents (e.g., statements starting with “No agent …”, “All agents …”, or
+    “No one …”), because these constraints also restrict rover operations. Also retain only
+    hazards relevant to surface navigation or safety, discarding any information related solely
+    to drones or satellites.
+
+    Input:
+    - mission_summary: {mission_summary}
+
+  expected_output: >
+    Return valid JSON only, with no markdown or explanatory text. The output must contain
+    exactly three top-level fields: rover_goals, constraints, and hazards. The rover_goals
+    field must be an array of scientific goals executable by surface rovers, where each goal
+    includes id, description, target_nodes as an array, terrain as a string, and
+    priority normalized to one of high, medium, or low. The constraints field must include
+    all rover-specific constraints and all global constraints that apply to all agents whenever
+    they appear in the mission summary, and the hazards field must list only hazards relevant to
+    surface navigation or safety. Do not include any additional fields or wrap arrays as strings.
+
+  agent: rover_context_cleaner
+
+
+decompose_rover_goals:
+  description: >
+      You will receive a rover mission context in JSON format containing rover_goals. Your task
+      is to decompose these rover_goals into primitive goals so that each primitive goal targets
+      exactly one node. For each original rover goal that contains multiple target_nodes, create
+      one primitive goal per target node and preserve the original intent, terrain, and priority.
+      Each primitive goal must have a unique id derived from the parent goal id (e.g., SG1_1, SG1_2),
+      must include parent_id linking back to the original goal, and must include target_node. The
+      primitive goal description must be rewritten to refer only to its own target_node (for example,
+      rewrite “...near nodes N12, N45, and N78” into “...near node N12” for the N12 primitive). Normalize
+      priorities to exactly one of: high, medium, or low.
+  expected_output: >
+      Return valid JSON only, with no markdown or explanatory text. The output must contain exactly
+      one top-level field named primitive_goals, which is an array. Each primitive goal must include
+      id, parent_id, description, target_node, terrain, and priority, and priority must be one of
+      high, medium, or low. The description must explicitly refer to only the single target_node of
+      that primitive goal and must not mention any other target nodes. 
+  agent: primitive_goal_decomposer
+
+

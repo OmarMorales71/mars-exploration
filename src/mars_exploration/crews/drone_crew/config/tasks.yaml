@@ -1,0 +1,13 @@
+plan_drone_surveys:
+  description: >
+    Generate an aerial survey plan for the Mars exploration mission. Analyze the
+    mission objectives and priorities together with the terrain map and drone
+    capabilities. Define drone flight paths that cover high-priority observation
+    areas while respecting constraints such as flight range, altitude limits,
+    and sensor capabilities.
+  expected_output: >
+    A structured description of planned drone survey missions, including selected
+    survey areas, flight paths or sequences, and the purpose of each survey.
+    The output should be clearly organized and suitable for integration with
+    rover plans during the mission coordination phase.
+  agent: drone_survey
