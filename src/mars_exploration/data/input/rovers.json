@@ -24,7 +24,7 @@
   {
     "id": "rover_2",
     "location": "N43",
-    "energy": 16,
+    "energy": 76,
     "speed": 2.64,
     "terrain_compatibility": [
       "plain",

@@ -18,7 +18,7 @@
   <data key="d0">sandy</data>
 </node>
 <node id="N5">
-  <data key="d0">rocky</data>
+  <data key="d0">crater</data>
 </node>
 <node id="N6">
   <data key="d0">rocky</data>
@@ -39,7 +39,7 @@
   <data key="d0">icy</data>
 </node>
 <node id="N12">
-  <data key="d0">crater</data>
+  <data key="d0">rocky</data>
 </node>
 <node id="N13">
   <data key="d0">crater</data>
@@ -69,10 +69,10 @@
   <data key="d0">crater</data>
 </node>
 <node id="N22">
-  <data key="d0">crater</data>
+  <data key="d0">icy</data>
 </node>
 <node id="N23">
-  <data key="d0">rocky</data>
+  <data key="d0">icy</data>
 </node>
 <node id="N24">
   <data key="d0">crater</data>
@@ -138,7 +138,7 @@
   <data key="d0">crater</data>
 </node>
 <node id="N45">
-  <data key="d0">crater</data>
+  <data key="d0">rocky</data>
 </node>
 <node id="N46">
   <data key="d0">plain</data>
@@ -237,7 +237,7 @@
   <data key="d0">crater</data>
 </node>
 <node id="N78">
-  <data key="d0">crater</data>
+  <data key="d0">rocky</data>
 </node>
 <node id="N79">
   <data key="d0">rocky</data>
@@ -273,7 +273,7 @@
   <data key="d0">sandy</data>
 </node>
 <node id="N90">
-  <data key="d0">icy</data>
+  <data key="d0">sandy</data>
 </node>
 <node id="N91">
   <data key="d0">sandy</data>

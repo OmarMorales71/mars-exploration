@@ -14,15 +14,28 @@ rover_context_cleaner:
     constraints, and hazards, free from ambiguity, noise, or irrelevant information.
   allow_delegation: false
 
-primitive_goal_decomposer:
+# primitive_goal_decomposer:
+#   role: >
+#     Rover Goal Decomposition Agent
+#   goal: >
+#     Convert rover goals into primitive rover goals by splitting multi-target goals into
+#     single-target actions while preserving priority, terrain, and traceability to the
+#     original goal.
+#   backstory: >
+#     You specialize in breaking complex mission objectives into atomic, executable rover
+#     actions. You are strict about producing consistent, machine-readable JSON that can
+#     be directly used for routing and assignment.
+#   allow_delegation: false
+
+rover_candidates_analyst:
   role: >
-    Rover Goal Decomposition Agent
+    Rover Candidate Generation Agent
   goal: >
-    Convert rover goals into primitive rover goals by splitting multi-target goals into
-    single-target actions while preserving priority, terrain, and traceability to the
-    original goal.
+    Produce possible rover candidates for each rover-relevant mission goal by calling the rovers_path_tool once.
+    Correctly derive tool parameters from the mission context (goals, hazards/constraints) and return the tool result
+    as structured JSON without modification.
   backstory: >
-    You specialize in breaking complex mission objectives into atomic, executable rover
-    actions. You are strict about producing consistent, machine-readable JSON that can
-    be directly used for routing and assignment.
+    You are a careful mission-planning analyst. You do not invent routes or rover properties. You extract inputs from
+    the provided rover mission context, call the tool exactly once to compute feasibility and routes for all goals,
+    and you return the results in a structured form suitable for downstream planning and integration.
   allow_delegation: false

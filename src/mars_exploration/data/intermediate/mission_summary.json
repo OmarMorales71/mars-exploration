@@ -1,9 +1,9 @@
 {
-    "mission_title": "Mars Mission Report",
-    "mission_description": "A mission report detailing the objectives, constraints, priorities, and hazards of a Mars exploration mission.",
+    "mission_title": "Mars Mission",
+    "mission_description": "The Mars mission aims to collect scientific data from various locations on the Martian surface.",
     "scientific_goals": [
         {
-            "id": "SG-1",
+            "id": "SG1",
             "description": "Collect subsurface samples from rocky terrain near nodes N12, N45, and N78.",
             "target_nodes": [
                 "N12",
@@ -11,35 +11,35 @@
                 "N78"
             ],
             "terrain": "rocky",
-            "priority": "Medium"
+            "priority": "medium"
         },
         {
-            "id": "SG-2",
+            "id": "SG2",
             "description": "Analyze ice composition in icy terrain at nodes N22 and N23.",
             "target_nodes": [
                 "N22",
                 "N23"
             ],
             "terrain": "icy",
-            "priority": "High"
+            "priority": "high"
         },
         {
-            "id": "SG-3",
+            "id": "SG3",
             "description": "Capture panoramic images of crater terrain at node N5.",
             "target_nodes": [
                 "N5"
             ],
             "terrain": "crater",
-            "priority": "Low"
+            "priority": "low"
         },
         {
-            "id": "SG-4",
+            "id": "SG4",
             "description": "Measure radiation levels in sandy terrain at node N90.",
             "target_nodes": [
                 "N90"
             ],
             "terrain": "sandy",
-            "priority": "High"
+            "priority": "high"
         }
     ],
     "constraints": [

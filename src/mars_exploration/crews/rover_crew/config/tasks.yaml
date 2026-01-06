@@ -4,7 +4,7 @@ clean_mission_for_rovers:
     only the information relevant to surface rover operations. Keep exclusively the
     scientific goals that can be executed by rovers, meaning goals that target surface
     locations identified by node IDs and require ground-based interaction such as sampling,
-    measurement, or surface imaging. Remove any goals that are aerial-only or orbital-only.
+    measurement, or surface imaging. Remove any goals that are aerial-only, orbital-only or image captured related.
     For each retained goal, include its id, description, target_nodes, terrain, and priority,
     normalizing priority values to exactly one of: high, medium, or low. For constraints,
     always include rover-specific constraints and always include any global constraint that
@@ -29,23 +29,63 @@ clean_mission_for_rovers:
   agent: rover_context_cleaner
 
 
-decompose_rover_goals:
+# decompose_rover_goals:
+#   description: >
+#       You will receive a rover mission context in JSON format containing rover_goals. Your task
+#       is to decompose these rover_goals into primitive goals so that each primitive goal targets
+#       exactly one node. For each original rover goal that contains multiple target_nodes, create
+#       one primitive goal per target node and preserve the original intent, terrain, and priority.
+#       Each primitive goal must have a unique id derived from the parent goal id (e.g., SG1_1, SG1_2),
+#       must include parent_id linking back to the original goal, and must include target_node. The
+#       primitive goal description must be rewritten to refer only to its own target_node (for example,
+#       rewrite “...near nodes N12, N45, and N78” into “...near node N12” for the N12 primitive). Normalize
+#       priorities to exactly one of: high, medium, or low.
+#   expected_output: >
+#       Return valid JSON only, with no markdown or explanatory text. The output must contain exactly
+#       one top-level field named primitive_goals, which is an array. Each primitive goal must include
+#       id, parent_id, description, target_node, terrain, and priority, and priority must be one of
+#       high, medium, or low. The description must explicitly refer to only the single target_node of
+#       that primitive goal and must not mention any other target nodes. 
+#   agent: primitive_goal_decomposer
+
+compute_possible_rover_assignments:
   description: >
-      You will receive a rover mission context in JSON format containing rover_goals. Your task
-      is to decompose these rover_goals into primitive goals so that each primitive goal targets
-      exactly one node. For each original rover goal that contains multiple target_nodes, create
-      one primitive goal per target node and preserve the original intent, terrain, and priority.
-      Each primitive goal must have a unique id derived from the parent goal id (e.g., SG1_1, SG1_2),
-      must include parent_id linking back to the original goal, and must include target_node. The
-      primitive goal description must be rewritten to refer only to its own target_node (for example,
-      rewrite “...near nodes N12, N45, and N78” into “...near node N12” for the N12 primitive). Normalize
-      priorities to exactly one of: high, medium, or low.
+    You are given a rover mission context in your task context (from clean_mission_for_rovers).
+    It contains: rover_goals, constraints, hazards.
+
+    Your job: compute rover candidates for every goal by calling rovers_path_tool ONCE.
+
+    Tool call rules (must follow exactly):
+    1) Build "goals" by copying ALL items from context.rover_goals into a list of dicts with keys:
+       goal_id, description, target_nodes, terrain, priority. (Do not rename keys. Do not change values.)
+    2) prohibited_nodes:
+       - Extract node ids from hazards strings if present.
+         Example hazard: "Node N60: ..." -> prohibited_nodes=["N60"].
+       - If you cannot extract any node ids, OMIT prohibited_nodes in the tool call.
+    3) energy_threshold:
+       - If constraints include "recharge if energy drops below X%", set energy_threshold=X (number).
+       - Otherwise OMIT energy_threshold in the tool call or pass 5.0 as default.
+    4) energy_cost:
+       - Only include energy_cost if the context explicitly gives an energy cost per movement.
+       - Otherwise OMIT energy_cost in the tool call or pass 0.2 as default.
+    5) Do not pass rover data to the tool (tool already has rovers). Do not pass mars_map (tool already has it).
+
+    After the tool call:
+    - Return ONLY valid JSON with one key:
+      { "possible_assignments": <tool_output> }
+    - Do not add explanations. Do not use markdown.
+
+    Constrain: 
+    The rovers_path_tool must be called just once. 
+
   expected_output: >
-      Return valid JSON only, with no markdown or explanatory text. The output must contain exactly
-      one top-level field named primitive_goals, which is an array. Each primitive goal must include
-      id, parent_id, description, target_node, terrain, and priority, and priority must be one of
-      high, medium, or low. The description must explicitly refer to only the single target_node of
-      that primitive goal and must not mention any other target nodes. 
-  agent: primitive_goal_decomposer
+    A single JSON object:
+    { "possible_assignments": [...] }
+    where the value is exactly the rovers_path_tool output list.
+
+  agent: rover_candidates_analyst
+
+
+
 
 

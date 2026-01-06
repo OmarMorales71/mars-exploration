@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import List, Optional, Literal
+Priority = Literal["high", "medium", "low"]
 
 
 class ScientificGoal(BaseModel):
@@ -10,8 +11,8 @@ class ScientificGoal(BaseModel):
     id: str = Field(..., description="Unique goal identifier, e.g., 'G1'")
     description: str = Field(..., description="Short goal statement")
     target_nodes: List[str] = Field(default_factory=list, description="Target graph nodes, e.g., ['N22','N23']")
-    terrain: Optional[str] = Field(default=None, description="Terrain type if specified in the report (e.g., 'icy')")
-    priority: str = Field(..., description="Priority level for this goal: high/medium/low.")
+    terrain: Optional[str] = Field(default=None, description="Terrain type if specified in the report (e.g., 'icy'). Must be one word value, don't use lterally terrain in value")
+    priority: Priority = Field(..., description="Priority level for this goal: high/medium/low. ONLY lowercase")
 
 
 

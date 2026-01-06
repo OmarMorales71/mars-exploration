@@ -12,10 +12,10 @@ process_mission_report:
   expected_output: >
     A mission analysis that is complete, internally consistent, and directly usable by
     downstream planning agents. It must capture the mission’s scientific goals,
-    operational/environmental constraints, mission priorities that must be part of each scientific goal and normalized to one of high, medium, or low, and hazards relevant
+    operational/environmental constraints, mission priorities that must be part of each scientific goal and MUST BE lower case and normalized to one of high, medium, or low, and hazards relevant
     to both surface and aerial operations. Any inferred items must be clearly marked as
     assumptions, and any ambiguous, conflicting, or missing information must be flagged
-    as planning risks or open issues. 
+    as planning risks or open issues. Important for terrain only one word in lowercase is accepted.
 
-
+    For priority field, value must be be 'high', 'medium' or 'low' only lower case values.
   agent: mission_analyst
