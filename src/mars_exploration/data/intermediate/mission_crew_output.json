@@ -1,6 +1,6 @@
 {
     "mission_title": "Mars Mission",
-    "mission_description": "The Mars mission aims to collect scientific data from various locations on the Martian surface.",
+    "mission_description": "A mission to explore Mars' surface and subsurface, with a focus on scientific goals such as ice analysis, radiation measurement, and panoramic imaging.",
     "scientific_goals": [
         {
             "id": "SG1",
@@ -10,7 +10,7 @@
                 "N45",
                 "N78"
             ],
-            "terrain": "rocky",
+            "terrain": "rocky terrain",
             "priority": "medium"
         },
         {
@@ -20,7 +20,7 @@
                 "N22",
                 "N23"
             ],
-            "terrain": "icy",
+            "terrain": "icy terrain",
             "priority": "high"
         },
         {
@@ -29,7 +29,7 @@
             "target_nodes": [
                 "N5"
             ],
-            "terrain": "crater",
+            "terrain": "crater terrain",
             "priority": "low"
         },
         {
@@ -38,7 +38,7 @@
             "target_nodes": [
                 "N90"
             ],
-            "terrain": "sandy",
+            "terrain": "sandy terrain",
             "priority": "high"
         }
     ],

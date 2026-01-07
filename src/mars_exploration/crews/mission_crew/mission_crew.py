@@ -17,6 +17,9 @@ class MissionCrew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
+    def __init__(self, output_dir):
+        self.output_dir = output_dir
+
     @agent
     def mission_analyst(self) -> Agent:
         return Agent(
@@ -28,7 +31,8 @@ class MissionCrew:
     def process_mission_report(self) -> Task:
         return Task(
             config=self.tasks_config["process_mission_report"],
-            output_pydantic=MissionSpec
+            output_pydantic=MissionSpec,
+            output_file=os.path.join(self.output_dir, "process_mission_report.json")
         )
 
     @crew

@@ -21,11 +21,11 @@ INPUT_DIR="src/mars_exploration/data/input"
 INTERMEDIATE_DIR="src/mars_exploration/data/intermediate"
 OUTPUT_DIR="src/mars_exploration/data/output"
 INPUT_REPORT=os.path.join(INPUT_DIR, "mission_report.md")
-MISSION_SUMMARY_JSON= os.path.join(INTERMEDIATE_DIR, "mission_summary.json")
+MISSION_SUMMARY_JSON= os.path.join(INTERMEDIATE_DIR, "mission_crew_output.json")
 MARS_MAP_PATH = os.path.join(INPUT_DIR, "mars_terrain.graphml")
 ROVERS_FILE = os.path.join(INPUT_DIR, "rovers.json")
 DRONES_FILE = os.path.join(INPUT_DIR, "drones.json")
-ROVER_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "rovers_plan_summary.json")
+ROVER_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "rover_crew_output.json")
 class MarsMissionState(BaseModel):
     mars_map_path: str = None
     input_report: str = None
@@ -55,7 +55,7 @@ class MarsMissionFlow(Flow[MarsMissionState]):
         print("Processing mission report")
 
         result = (
-            MissionCrew()
+            MissionCrew(output_dir=INTERMEDIATE_DIR)
             .crew()
             .kickoff(inputs={
             "mission_report": self.state.input_report
@@ -76,7 +76,7 @@ class MarsMissionFlow(Flow[MarsMissionState]):
         print(f"Planning rover operations {self.state.mission_summary}")
         print(self.state.rovers)
         result = (
-            RoverCrew(mapp=self.state.mars_map_path, rovers=self.state.rovers)
+            RoverCrew(mapp=self.state.mars_map_path, rovers=self.state.rovers, output_dir=INTERMEDIATE_DIR)
             .crew()
             .kickoff(inputs={
                 "mission_summary": self.state.mission_summary.model_dump_json()          
@@ -134,87 +134,6 @@ def plot():
 
 def read_map(map):
     return nx.read_graphml(map)
-import json
-from typing import Any, Dict, List, Optional, Tuple
-
-
-def run_rover_candidates_with_retries(
-    rover_crew,
-    rovers: List[Dict[str, Any]],
-    primitive_goals: List[Dict[str, Any]],
-    max_retries: int = 3,
-) -> Dict[str, Any]:
-    """
-    Re-run RoverCrew until output covers all primitive goals:
-      len(assignments)+len(failures) == len(primitive_goals)
-
-    Uses repair_instructions to tell the model exactly what's missing.
-    """
-    expected_ids = [g["id"] for g in primitive_goals]
-    expected_set = set(expected_ids)
-
-    repair: str = ""
-    last_raw: Optional[str] = None
-
-    for attempt in range(max_retries + 1):
-        inputs = {"rovers": rovers}
-        if repair:
-            inputs["repair_instructions"] = repair
-        result = rover_crew.crew().kickoff(inputs=inputs)
-
-        last_raw = result.raw
-
-        # parse JSON even if the model wrapped it
-        data = None
-        try:
-            if isinstance(last_raw, str):
-                s = last_raw.strip()
-                # strip ```json fences if present
-                if s.startswith("```"):
-                    s = s.split("```", 2)[1] if "```" in s else s
-                    s = s.replace("json", "", 1).strip()
-                data = json.loads(s)
-            elif getattr(result, "json_dict", None):
-                data = result.json_dict
-            else:
-                data = json.loads(str(last_raw))
-        except Exception:
-            repair = (
-                "Your previous output was not valid JSON. Return ONLY valid JSON with top-level keys "
-                "assignments and failures, and include one entry per primitive goal."
-            )
-            continue
-
-        assignments = data.get("assignments", [])
-        failures = data.get("failures", [])
-
-        # collect which primitive_goal_ids are covered
-        covered = set()
-        for a in assignments:
-            pid = a.get("primitive_goal_id")
-            if pid:
-                covered.add(pid)
-        for f in failures:
-            pid = f.get("primitive_goal_id")
-            if pid:
-                covered.add(pid)
-
-        missing = [pid for pid in expected_ids if pid not in covered]
-
-        if not missing:
-            # success
-            return data
-
-        repair = (
-            "You omitted some primitive goals. You MUST return entries for EVERY primitive goal id in the context.\n"
-            f"Missing primitive_goal_id(s): {missing}\n"
-            "For each missing id, add an assignments item with that primitive_goal_id and candidates (max 2). "
-            "If no candidate exists, add it to failures with a reason. Return ONLY valid JSON."
-        )
-
-    raise RuntimeError(
-        f"Failed to cover all primitive goals after {max_retries+1} attempts. Last output was:\n{last_raw}"
-    )
 
 if __name__ == "__main__":
     kickoff()

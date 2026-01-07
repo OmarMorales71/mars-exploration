@@ -4,6 +4,7 @@ from typing import List, Optional, Literal
 
 Priority = Literal["high", "medium", "low"]
 
+# Clean goals agent 
 class RoverGoal(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -21,7 +22,7 @@ class RoverMissionContext(BaseModel):
     constraints: List[str] = Field(default_factory=list, description="Only constraints relevant to rover operations.")
     hazards: List[str] = Field(default_factory=list, description="Hazards relevant to rover operations.")
 
-
+# Process paths agent
 class RoverCandidate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -69,37 +70,49 @@ class PossibleAssignments(BaseModel):
     )
 
 
-# class PrimitiveGoal(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
-#     id: str = Field(..., description="Unique primitive goal id, e.g., SG1_1.")
-#     parent_id: str = Field(..., description="Original goal id, e.g., SG1.")
-#     description: str = Field(..., description="Goal description (infered from parent goal).")
-#     target_node: str = Field(..., description="Single target node for this primitive goal.")
-#     terrain: str = Field(..., description="Terrain type.")
-#     priority: str = Field(..., description="Priority normalized to high/medium/low.")
+# Selecter agent
 
-# class PrimitiveGoalsOutput(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
-#     primitive_goals: List[PrimitiveGoal] = Field(default_factory=list, description="Expanded primitive goals.")
-#     constraints: List[str] = Field(default_factory=list, description="Only constraints relevant to rover operations.")
-#     hazards: List[str] = Field(default_factory=list, description="Hazards relevant to rover operations.")
+class RoverGoalAssignment(BaseModel):
+    model_config = ConfigDict(extra="forbid")
 
-# class RoverCandidate(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
+    goal_id: str = Field(..., description="Goal id copied from possible_assignments[i].goal_id.")
+    description: str = Field(..., description="Goal description copied from possible_assignments[i].description.")
+    priority: Priority = Field(..., description="Goal priority copied from possible_assignments[i].priority (normalized).")
+    terrain: str = Field(..., description="Goal terrain copied from possible_assignments[i].terrain.")
+    target_nodes: List[str] = Field(..., description="Goal target_nodes copied from possible_assignments[i].target_nodes.")
 
-#     rover_id: str = Field(..., description="Rover id that can execute the primitive goal.")
-#     path: List[str] = Field(..., description="Shortest path from rover location to target node.")
-#     distance: float = Field(..., description="Total route distance returned by the tool.")
+    selected_rover: RoverCandidate = Field(
+        ...,
+        description="Chosen rover candidate. Must match RoverCandidate exactly (do not change structure)."
+    )
 
+    selection_reason: str = Field(
+        ...,
+        description="One short paragraph explaining why this rover was chosen (balance + feasibility + efficiency)."
+    )
 
-# class CandidatesForGoal(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
+class RoverGoalFailure(BaseModel):
+    model_config = ConfigDict(extra="forbid")
 
-#     primitive_goal_id: str = Field(..., description="Primitive goal id.")
-#     candidates: List[RoverCandidate] = Field(default_factory=list, description="Rovers that can complete this goal.")
+    goal_id: str = Field(..., description="Goal id copied from possible_assignments[i].goal_id.")
+    description: str = Field(..., description="Goal description copied from possible_assignments[i].description.")
+    priority: Priority = Field(..., description="Goal priority copied from possible_assignments[i].priority.")
+    terrain: str = Field(..., description="Goal terrain copied from possible_assignments[i].terrain.")
+    target_nodes: List[str] = Field(..., description="Goal target_nodes copied from possible_assignments[i].target_nodes.")
 
-# class RoverCandidatesPlan(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
+    reason: str = Field(
+        ...,
+        description="Explain why the goal cannot be completed based on the no_candidates reasons (summary)."
+    )
 
-#     assignments: List[CandidatesForGoal] = Field(default_factory=list, description="Candidate rovers for each primitive goal.")
-#     failures: List[dict] = Field(default_factory=list, description="Primitive goals that no rover can complete.")
+class RoverSelectionPlan(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    assignments: List[RoverGoalAssignment] = Field(
+        default_factory=list,
+        description="One selected rover per goal when at least one candidate exists."
+    )
+    failures: List[RoverGoalFailure] = Field(
+        default_factory=list,
+        description="Goals that have zero candidates. Must include reason derived from no_candidates."
+    )
