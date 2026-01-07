@@ -1,13 +1,30 @@
-plan_drone_surveys:
+clean_mission_for_drones:
   description: >
-    Generate an aerial survey plan for the Mars exploration mission. Analyze the
-    mission objectives and priorities together with the terrain map and drone
-    capabilities. Define drone flight paths that cover high-priority observation
-    areas while respecting constraints such as flight range, altitude limits,
-    and sensor capabilities.
+    You will receive a mission summary in JSON format. Your task is to extract and return
+    only the information relevant to aerial drone operations. Keep exclusively the
+    scientific goals that can be executed by drones, meaning goals that can be completed with a camera 
+    and not collecting any sampling like aerial survey, reconnaissance, imaging, or observation. 
+    Remove any goals that are rover-only (e.g., subsurface sampling, drilling, ground sampling) or satellite-only
+    (orbital communication/relay constraints). For each retained goal, include its id,
+    description, target_nodes, terrain, and priority, normalizing priority values to
+    exactly one (in lowercase) of: high, medium, or low. For constraints, always include drone-specific
+    constraints and always include any global constraint that applies to all agents
+    (e.g., statements starting with “No agent …”, “All agents …”, or “No one …”), because
+    these constraints also restrict drone operations. Also retain only hazards relevant to
+    aerial navigation or flight safety, such as dust storms, radiation zones, or restricted
+    terrains that drones must avoid.
+
+    Input:
+    - mission_summary: {mission_summary}
+
   expected_output: >
-    A structured description of planned drone survey missions, including selected
-    survey areas, flight paths or sequences, and the purpose of each survey.
-    The output should be clearly organized and suitable for integration with
-    rover plans during the mission coordination phase.
-  agent: drone_survey
+    Return valid JSON only, with no markdown or explanatory text. The output must contain
+    exactly three top-level fields: drone_goals, constraints, and hazards. The drone_goals
+    field must be an array of scientific goals executable by drones, where each goal
+    includes id, description, target_nodes as an array, terrain as a string, and
+    priority normalized to one of high, medium, or low. The constraints field must include
+    all drone-specific constraints and all global constraints that apply to all agents whenever
+    they appear in the mission summary, and the hazards field must list only hazards relevant to
+    aerial navigation or flight safety. Do not include any additional fields or wrap arrays as strings.
+
+  agent: drone_context_cleaner

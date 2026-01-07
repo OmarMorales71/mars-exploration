@@ -26,6 +26,8 @@ MARS_MAP_PATH = os.path.join(INPUT_DIR, "mars_terrain.graphml")
 ROVERS_FILE = os.path.join(INPUT_DIR, "rovers.json")
 DRONES_FILE = os.path.join(INPUT_DIR, "drones.json")
 ROVER_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "rover_crew_output.json")
+DRONE_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "drone_crew_output.json")
+
 class MarsMissionState(BaseModel):
     mars_map_path: str = None
     input_report: str = None
@@ -71,10 +73,10 @@ class MarsMissionFlow(Flow[MarsMissionState]):
         print(self.state.drones)
         print(self.state.rovers)
 
-    @listen(process_mission)
+    # @listen(process_mission)
     def plan_rover_operations(self):
         print(f"Planning rover operations {self.state.mission_summary}")
-        print(self.state.rovers)
+
         result = (
             RoverCrew(mapp=self.state.mars_map_path, rovers=self.state.rovers, output_dir=INTERMEDIATE_DIR)
             .crew()
@@ -82,14 +84,31 @@ class MarsMissionFlow(Flow[MarsMissionState]):
                 "mission_summary": self.state.mission_summary.model_dump_json()          
             })
         )
-        print(f"Finish rover 1")
-        print(result)
+
         self.state.rover_plan = result.pydantic
-        print(f"Finish rover 1.5")
 
         with open(ROVER_PLAN_JSON, "w", encoding="utf-8") as f:
             f.write(self.state.rover_plan.model_dump_json(indent=4))
-        print(self.state.rover_plan)
+
+    @listen(process_mission)
+    def plan_drone_operations(self):
+        print(f"Planning drone operations {self.state.mission_summary}")
+        print(self.state.rovers)
+        result = (
+            DroneCrew(mapp=self.state.mars_map_path, drones=self.state.drones, output_dir=INTERMEDIATE_DIR)
+            .crew()
+            .kickoff(inputs={
+                "mission_summary": self.state.mission_summary.model_dump_json()          
+            })
+        )
+        print(f"Finish rover 1")
+        print(result)
+        self.state.drone_plan = result.pydantic
+        print(f"Finish rover 1.5")
+
+        with open(DRONE_PLAN_JSON, "w", encoding="utf-8") as f:
+            f.write(self.state.drone_plan.model_dump_json(indent=4))
+        print(self.state.drone_plan)
         print(f"Finish rover 2")
 
 

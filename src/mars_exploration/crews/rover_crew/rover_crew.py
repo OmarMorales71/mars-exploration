@@ -22,6 +22,8 @@ class RoverCrew:
     def __init__(self, mapp, rovers, output_dir):
         self.route_tool = RoversPathTool(mars_map=mapp, rovers=rovers)
         self.output_dir = output_dir
+        os.makedirs(self.output_dir, exist_ok=True)
+
 
     @agent
     def rover_context_cleaner(self) -> Agent:

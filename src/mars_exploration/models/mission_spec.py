@@ -8,27 +8,11 @@ Priority = Literal["high", "medium", "low"]
 class ScientificGoal(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    id: str = Field(..., description="Unique goal identifier, e.g., 'G1'")
+    goal_id: str = Field(..., description="Unique goal identifier, e.g., 'G1'")
     description: str = Field(..., description="Short goal statement")
     target_nodes: List[str] = Field(default_factory=list, description="Target graph nodes, e.g., ['N22','N23']")
     terrain: Optional[str] = Field(default=None, description="Terrain type if specified in the report (e.g., 'icy'). Must be one word value, don't use lterally terrain in value")
     priority: Priority = Field(..., description="Priority level for this goal: high/medium/low. ONLY lowercase")
-
-
-
-# class Constraint(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
-
-#     applies_to: str = Field(..., description="Which agent type the constraint applies to")
-#     description: str = Field(..., description="Constraint in plain language")
-
-
-# class Hazard(BaseModel):
-#     model_config = ConfigDict(extra="forbid")
-
-#     location: str = Field(..., description="Location identifier, typically a node id like 'N88'")
-#     description: str = Field(..., description="Hazard description")
-
 
 class MissionSpec(BaseModel):
     """
@@ -74,7 +58,7 @@ class MissionSpec(BaseModel):
     @field_validator("scientific_goals")
     @classmethod
     def _unique_goal_ids(cls, goals: List[ScientificGoal]) -> List[ScientificGoal]:
-        ids = [g.id for g in goals]
+        ids = [g.goal_id for g in goals]
         dupes = {x for x in ids if ids.count(x) > 1}
         if dupes:
             raise ValueError(f"Duplicate goal ids found: {sorted(dupes)}")
