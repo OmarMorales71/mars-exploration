@@ -24,7 +24,8 @@ class MissionCrew:
     def mission_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config["mission_analyst"], 
-            llm=get_llm()
+            llm=get_llm(),
+            max_iter=5
         )
 
     @task

@@ -28,3 +28,122 @@ clean_mission_for_drones:
     aerial navigation or flight safety. Do not include any additional fields or wrap arrays as strings.
 
   agent: drone_context_cleaner
+
+compute_possible_drone_assignments:
+  description: >
+    You are given a drone mission context in your task context (from clean_mission_for_drones).
+    It contains: drone_goals, constraints, hazards.
+
+    Constraint:
+    The drones_path_tool must be called just once.
+
+    Your job: compute drone candidates for every goal by calling drones_path_tool ONCE.
+
+    Tool call rules (must follow exactly):
+    1) Build "goals" by copying ALL items from context.drone_goals into a list of dicts with keys:
+       goal_id, description, target_nodes, terrain, priority. (Do not rename keys. Do not change values.)
+    2) prohibited_nodes:
+       - Extract node ids from hazards strings AND constraints strings if present.
+         Example hazard: "Node N88: ..." -> prohibited_nodes=["N88"].
+         Example constraint: "... at N1 ..." -> prohibited_nodes may include "N1" if it is described as prohibited.
+       - Only include nodes that are explicitly hazards or explicitly forbidden.
+       - If you cannot extract any node ids, OMIT prohibited_nodes in the tool call.
+    3) flight_time_threshold:
+       - If constraints include "return to base after X minutes" or similar, set flight_time_threshold=X (number). Default value is 240
+       - Otherwise OMIT flight_time_threshold (tool default applies).
+    4) time_cost:
+       - Only include time_cost if the context explicitly gives a time conversion factor.
+       - Otherwise OMIT time_cost (tool default applies) or use 1.0 as default.
+    5) Do not pass drone data to the tool (tool already has drones). Do not pass mars_map (tool already has it).
+
+    After the tool call:
+    - Return ONLY valid JSON with one key:
+      { "possible_assignments": <tool_output> }
+    - Do not add explanations. Do not use markdown.
+
+  expected_output: >
+    A single JSON object:
+    { "possible_assignments": [...] }
+    where the value is exactly the drones_path_tool output list.
+
+  agent: drone_candidates_analyst
+
+select_drone_candidate:
+  description: >
+    You receive ONE input variable named possible_assignments from input context.
+    It is a JSON ARRAY (list) of goal objects. DO NOT CHANGE IT.
+
+    CRITICAL RULE 1 (tool call must pass the list EXACTLY):
+    You MUST call split_goals_tool exactly ONCE and you MUST pass the tool parameter
+    possible_assignments EXACTLY as provided in the input context, with ZERO changes
+    (no edits, no reformatting, no removing fields, no renaming keys, no abbreviations,
+    no summarizing, no selecting a subset). If the input contains SG4 and SG3, the tool input must contain SG4 and SG3.
+
+    CRITICAL RULE 2 (tool output is NOT the final output):
+    The tool output is ONLY used to decide whether a goal_id belongs in assignments or failures.
+    The tool output MUST NOT be copied as the final answer.
+    All fields in the final output MUST come from the input possible_assignments list.
+
+    CRITICAL RULE 3 (no invention, no modification):
+    You MUST ONLY use goals that exist in the input possible_assignments list.
+    You MUST NOT invent new goals, descriptions, terrains, target nodes, or candidates.
+    You MUST NOT modify goal fields. You MUST copy goal fields EXACTLY as provided in the input list.
+
+    REQUIRED COVERAGE:
+    Every goal object in the input possible_assignments list MUST appear exactly once in the output:
+    either in assignments OR in failures.
+    Therefore:
+      len(assignments) + len(failures) == len(possible_assignments)
+    and each goal_id appears in exactly one of (assignments, failures), never both.
+
+    HOW TO BUILD ASSIGNMENTS:
+    For each input goal object where candidates is a non-empty list:
+    - Output one assignment object.
+    - Copy these fields EXACTLY from the goal object:
+      goal_id, description, priority, terrain, target_nodes
+    - selected_drone MUST be exactly ONE object copied from that goal's candidates list.
+      You are allowed to choose which one, but once chosen you MUST copy it exactly as it appears.
+      Do not change drone_id/path/distance/time_required/location/altitude/camera_resolution.
+    - selection_reason: one short paragraph explaining why you selected that candidate,
+      mentioning balancing drone usage if possible + the tie-breakers (camera/altitude/range/time_required).
+
+    HOW TO BUILD FAILURES:
+    For each input goal object where candidates is an empty list:
+    - Output one failure object.
+    - Copy these fields EXACTLY from the goal object:
+      goal_id, description, priority, terrain, target_nodes
+    - reason: summarize why it failed using ONLY that goal's no_candidates reasons.
+
+    DRONE SELECTION RULES (simple and strict):
+    1) Process goals in priority order: high first, then medium, then low.
+    2) Balance drone usage: avoid selecting the same drone if another valid drone exists for that goal.
+       Keep a running count of how many times each drone has been selected.
+    3) When multiple candidates are available, prefer:
+       - lowest current usage count
+       - then higher camera_resolution (parse "20MP" -> 20)
+       - then higher altitude
+       - then lower time_required
+       - then lower distance
+
+    STRICT OUTPUT QUALITY RULES (to prevent placeholders):
+    - description MUST NOT be empty.
+    - terrain MUST NOT be empty.
+    - target_nodes MUST NOT be empty.
+    - For assignments: selected_drone.drone_id must not be empty and selected_drone.path must not be empty.
+      If the input has values, you must copy them.
+
+    Output:
+    Return ONLY valid JSON matching the output Pydantic model. No markdown, no explanations.
+
+    Important: possible_assignments from input context is the source of truth.
+
+  expected_output: >
+    A JSON object that:
+    - uses ONLY the input possible_assignments goals (no extra goals),
+    - copies goal fields exactly from possible_assignments,
+    - selects exactly one candidate per goal when candidates is non-empty,
+    - creates failures only when candidates is empty,
+    - and covers all input goals exactly once.
+
+  agent: drone_assignment_selector
+

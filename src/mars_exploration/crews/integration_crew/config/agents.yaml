@@ -1,4 +1,4 @@
-mission_integration:
+integration_planner:
   role: >
     Mission Plan Integration and Coordination Agent
   goal: >

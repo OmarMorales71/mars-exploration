@@ -15,18 +15,23 @@ from mars_exploration.crews.integration_crew.integration_crew import Integration
 import json
 
 from mars_exploration.models.mission_spec import MissionSpec
+from mars_exploration.models.rover_models import RoverSelectionPlan
+from mars_exploration.models.drone_models import DroneSelectionPlan
+
+
 
 #Constants 
 INPUT_DIR="src/mars_exploration/data/input"
 INTERMEDIATE_DIR="src/mars_exploration/data/intermediate"
 OUTPUT_DIR="src/mars_exploration/data/output"
 INPUT_REPORT=os.path.join(INPUT_DIR, "mission_report.md")
-MISSION_SUMMARY_JSON= os.path.join(INTERMEDIATE_DIR, "mission_crew_output.json")
+MISSION_SUMMARY_JSON= os.path.join(INTERMEDIATE_DIR, "mission_crew","mission_crew_output.json")
 MARS_MAP_PATH = os.path.join(INPUT_DIR, "mars_terrain.graphml")
 ROVERS_FILE = os.path.join(INPUT_DIR, "rovers.json")
 DRONES_FILE = os.path.join(INPUT_DIR, "drones.json")
-ROVER_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "rover_crew_output.json")
-DRONE_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "drone_crew_output.json")
+ROVER_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "rover_crew", "rover_crew_output.json")
+DRONE_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "drone_crew", "drone_crew_output.json")
+FINAL_PLAN_MD = os.path.join(OUTPUT_DIR, "final_mission_plan.md")
 
 class MarsMissionState(BaseModel):
     mars_map_path: str = None
@@ -34,8 +39,8 @@ class MarsMissionState(BaseModel):
     mission_summary: MissionSpec = None
     rovers: List[Dict[str, Any]] = None
     drones : List[Dict[str, Any]] = None
-    rover_plan: str = ""
-    drone_plan: str = ""
+    rover_plan: RoverSelectionPlan = ""
+    drone_plan: DroneSelectionPlan = ""
     final_plan: str = ""
 
 
@@ -57,7 +62,7 @@ class MarsMissionFlow(Flow[MarsMissionState]):
         print("Processing mission report")
 
         result = (
-            MissionCrew(output_dir=INTERMEDIATE_DIR)
+            MissionCrew(output_dir=os.path.join(INTERMEDIATE_DIR, "mission_crew"))
             .crew()
             .kickoff(inputs={
             "mission_report": self.state.input_report
@@ -70,15 +75,13 @@ class MarsMissionFlow(Flow[MarsMissionState]):
 
         self.state.mission_summary = mission_spec
 
-        print(self.state.drones)
-        print(self.state.rovers)
 
-    # @listen(process_mission)
+    @listen(process_mission)
     def plan_rover_operations(self):
-        print(f"Planning rover operations {self.state.mission_summary}")
+        print(f"Planning rover operations")
 
         result = (
-            RoverCrew(mapp=self.state.mars_map_path, rovers=self.state.rovers, output_dir=INTERMEDIATE_DIR)
+            RoverCrew(mapp=self.state.mars_map_path, rovers=self.state.rovers, output_dir=os.path.join(INTERMEDIATE_DIR, "rover_crew"))
             .crew()
             .kickoff(inputs={
                 "mission_summary": self.state.mission_summary.model_dump_json()          
@@ -92,8 +95,7 @@ class MarsMissionFlow(Flow[MarsMissionState]):
 
     @listen(process_mission)
     def plan_drone_operations(self):
-        print(f"Planning drone operations {self.state.mission_summary}")
-        print(self.state.rovers)
+        print(f"Planning drone operations")
         result = (
             DroneCrew(mapp=self.state.mars_map_path, drones=self.state.drones, output_dir=INTERMEDIATE_DIR)
             .crew()
@@ -101,45 +103,30 @@ class MarsMissionFlow(Flow[MarsMissionState]):
                 "mission_summary": self.state.mission_summary.model_dump_json()          
             })
         )
-        print(f"Finish rover 1")
-        print(result)
         self.state.drone_plan = result.pydantic
-        print(f"Finish rover 1.5")
 
         with open(DRONE_PLAN_JSON, "w", encoding="utf-8") as f:
             f.write(self.state.drone_plan.model_dump_json(indent=4))
-        print(self.state.drone_plan)
-        print(f"Finish rover 2")
 
+    @listen(and_(plan_rover_operations, plan_drone_operations))
+    def integrate_mission(self):
+        print("Integrating final mission plan")
 
-    # @listen(process_mission)
-    # def plan_drone_surveys(self):
-    #     print("Planning drone surveys")
+        result = (
+            IntegrationCrew(output_dir=os.path.join(OUTPUT_DIR, "integration"))
+            .crew()
+            .kickoff(inputs={
+                "mission_summary": self.state.mission_summary.model_dump(),
+                "rover_plan": self.state.rover_plan.model_dump(),
+                "drone_plan": self.state.drone_plan.model_dump(),
+            })
+        )
 
-    #     result = (
-    #         DroneCrew()
-    #         .crew()
-    #         .kickoff(inputs={
-    #             "mission_summary": self.state.mission_summary
-    #         })
-    #     )
+        # Integration output is Markdown (human readable)
+        self.state.final_plan = result.raw
 
-    #     self.state.drone_plan = result.raw
-
-    # @listen(and_(plan_rover_operations, plan_drone_surveys))
-    # def integrate_mission(self):
-    #     print("Integrating mission plans")
-
-    #     result = (
-    #         IntegrationCrew()
-    #         .crew()
-    #         .kickoff(inputs={
-    #             "rover_plan": self.state.rover_plan,
-    #             "drone_plan": self.state.drone_plan
-    #         })
-    #     )
-
-    #     self.state.final_plan = result.raw
+        with open(FINAL_PLAN_MD, "w", encoding="utf-8") as f:
+            f.write(self.state.final_plan)
 
 
 def kickoff():
@@ -150,9 +137,6 @@ def kickoff():
 def plot():
     flow = MarsMissionFlow()
     flow.plot()
-
-def read_map(map):
-    return nx.read_graphml(map)
 
 if __name__ == "__main__":
     kickoff()

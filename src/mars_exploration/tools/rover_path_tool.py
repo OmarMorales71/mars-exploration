@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Literal, Optional, Set
+from typing import Any, Dict, List, Literal, Set
 
 import networkx as nx
 from crewai.tools import BaseTool
@@ -134,20 +134,15 @@ class RoversPathTool(BaseTool):
 
         # Sort goals by priority (stable)
         goals_sorted = sorted(goals, key=lambda g: _priority_rank(str(g.get("priority", "")).lower()))
-        print(f"goals_sorted {goals_sorted}")
         results: List[GoalCandidates] = []
 
         for goal in goals_sorted:
             goal_id = str(goal.get("goal_id", "")).strip()
             goal_description = str(goal.get("description", "")).strip()
 
-            # Normalize goal terrain + priority
-            terrain = normalize_terrain(goal.get("terrain", ""))
+            terrain = normalize_terrain(goal.get("terrain", "").strip())
 
-            priority_raw = str(goal.get("priority", "")).strip()
-            priority_norm = priority_raw.lower()
-            if priority_norm not in ("high", "medium", "low"):
-                priority_norm = "medium"
+            priority = str(goal.get("priority", "")).strip().lower() or "medium"
 
             # Read targets
             target_nodes = goal.get("target_nodes") or []
@@ -155,7 +150,7 @@ class RoversPathTool(BaseTool):
 
             goal_out = GoalCandidates(
                 goal_id=goal_id,
-                priority=priority_norm,  # normalized output
+                priority=priority, 
                 description=goal_description,
                 terrain=terrain,
                 target_nodes=target_nodes,
@@ -199,10 +194,9 @@ class RoversPathTool(BaseTool):
                     )
                     continue
 
-                # If no targets, reject rover for this goal (and effectively the goal)
                 if not target_nodes:
                     goal_out.no_candidates.append(
-                        RoverRejection(rover_id=rover_id, reason="goal has no target_nodes")
+                        RoverRejection(rover_id=rover_id, reason="Goal has no target_nodes. It is not a clear goal.")
                     )
                     continue
 

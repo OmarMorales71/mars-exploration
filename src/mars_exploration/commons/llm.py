@@ -13,7 +13,7 @@ def get_llm() -> LLM:
 
         _llm_instance = LLM(
             model=f"{provider}/{model}",
-            base_url=base_url,
+            base_url=base_url
         )
 
     return _llm_instance

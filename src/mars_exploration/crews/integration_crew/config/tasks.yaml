@@ -1,13 +1,47 @@
 integrate_mission_plans:
   description: >
-    Integrate the rover exploration plan and the drone survey plan into a single
-    coordinated mission strategy. Analyze both plans to identify and resolve
-    potential conflicts in timing, location usage, or resource allocation.
-    Ensure that the final plan is consistent with mission objectives and
-    operational constraints.
+    Integrate the rover plan and the drone plan into a single,
+    coherent mission strategy. Use the mission summary to ensure that all scientific
+    goals are addressed consistently and that each goal is executed by only one
+    vehicle type. Synthesize the plans into a coordinated narrative that explains in detail
+    how rover and drone operations complement each other, how activities are sequenced
+    or parallelized prioritizing the high priority goals, and how coordination between vehicle types supports the overall
+    mission objectives. Identify any goals that could not be assigned to a vehicle
+    and explain their impact on the mission, if the goal is an assignment in rover_plan or drone plan cannot be a mission failure.
+    
+
+    All the plan information must match with
+    - mission_summary: {mission_summary}
+    - rover_plan: {rover_plan}
+    - drone_plan: {drone_plan}
+
+    Mission strategy section must explain in detail how each goal is completed. Each movement, activity and coordination based on rover_plan and drone_plan must be explain here. 
+    Mission strategy is the most important section and must be the biggest one with the most of details.
   expected_output: >
-    A unified mission plan presented in a clear and well-structured format,
-    describing the coordinated sequence of rover and drone activities. The
-    output should be suitable for final review and communication, for example
-    as a Markdown-formatted mission strategy.
-  agent: mission_integration
+    A unified mission strategy written in clear, human-readable Markdown. The output
+    should describe the overall mission intent, the most important rover activities, the
+    most important drone activities, and how these operations are coordinated in detail. It should
+    also summarize general operational constraints and risks, and explicitly mention
+    any scientific goals that could not be completed. The result must be suitable
+    for final mission review and communication.
+
+    structure
+    # Mission Title
+
+    ## Mission Overview
+    High-level summary of the mission purpose and priorities.
+
+    ##  Mission strategy
+    A paragraph explaining how each goal is completed listing each step. You must explain how rover and drone activities are coordinated to maximize
+    mission efficiency, parallelism, and robustness. Each movement to complete each goal must be explain here.
+    e.g.
+    ### Goal 1
+    1. <step1>
+    2. <step2>
+
+    Mission strategy section is the most important.
+
+  agent: integration_planner
+
+
+

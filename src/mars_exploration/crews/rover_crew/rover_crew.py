@@ -29,6 +29,7 @@ class RoverCrew:
     def rover_context_cleaner(self) -> Agent:
         return Agent(
             config=self.agents_config["rover_context_cleaner"],
+            max_iter=5,
             llm=get_llm(),
         )
 
@@ -46,6 +47,7 @@ class RoverCrew:
         return Agent(
             config=self.agents_config["rover_candidates_analyst"],
             llm=get_llm(),
+            max_iter=5,
             tools=[self.route_tool]
         )
     
@@ -63,6 +65,7 @@ class RoverCrew:
         return Agent(
             config=self.agents_config["rover_assignment_selector"],
             llm=get_llm(),
+            max_iter=20,
             tools=[SplitGoalsTool()]
         )
     

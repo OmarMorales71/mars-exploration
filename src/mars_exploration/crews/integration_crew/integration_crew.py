@@ -17,17 +17,25 @@ class IntegrationCrew:
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
 
+    def __init__(self, output_dir, **kwargs):
+        super().__init__(**kwargs)
+        self.output_dir = output_dir
+        os.makedirs(self.output_dir, exist_ok=True)
+
     @agent
-    def mission_integration(self) -> Agent:
+    def integration_planner(self) -> Agent:
         return Agent(
-            config=self.agents_config["mission_integration"], 
-            llm=get_llm()
+            config=self.agents_config["integration_planner"], 
+            llm=get_llm(),
+            reasoning=False
         )
 
     @task
     def integrate_mission_plans(self) -> Task:
         return Task(
-            config=self.tasks_config["integrate_mission_plans"], 
+            config=self.tasks_config["integrate_mission_plans"],
+            markdown=True,
+            output_file=os.path.join(self.output_dir, "integrate_mission_plans.md")
         )
 
     @crew
