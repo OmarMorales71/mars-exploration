@@ -9,6 +9,7 @@ integrate_mission_plans:
     mission objectives. Identify any goals that could not be assigned to a vehicle
     and explain their impact on the mission, if the goal is an assignment in rover_plan or drone plan cannot be a mission failure.
     
+    A goal can be completed if one vehicle can finish it. Remember any rover can complete one or more goals.
 
     All the plan information must match with
     - mission_summary: {mission_summary}

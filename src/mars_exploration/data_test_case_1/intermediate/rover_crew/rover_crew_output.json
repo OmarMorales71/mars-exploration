@@ -1,0 +1,56 @@
+{
+  "assignments": [
+    {
+      "goal_id": "SG2",
+      "description": "Analyze ice composition in icy terrain at nodes N22 and N23.",
+      "priority": "high",
+      "terrain": "icy",
+      "target_nodes": ["N22", "N23"],
+      "selected_rover": {
+        "rover_id": "rover_3",
+        "path": ["N34", "N5", "N22", "N59", "N23", "N59", "N64", "N34"],
+        "distance": 138.0,
+        "energy_required": 13.8,
+        "recharge_before": false,
+        "speed": 2.13,
+        "location": "N34"
+      },
+      "selection_reason": "Selected rover_3 for SG2 because it is terrain-compatible with icy terrain and has the lowest energy_required among candidates, while also helping balance rover usage by not immediately using rover_2 if another efficient option exists."
+    },
+    {
+      "goal_id": "SG4",
+      "description": "Measure radiation levels in sandy terrain at node N90.",
+      "priority": "high",
+      "terrain": "sandy",
+      "target_nodes": ["N90"],
+      "selected_rover": {
+        "rover_id": "rover_1",
+        "path": ["N16", "N90", "N16"],
+        "distance": 26.0,
+        "energy_required": 2.6,
+        "recharge_before": false,
+        "speed": 2.45,
+        "location": "N16"
+      },
+      "selection_reason": "Selected rover_1 for SG4 to balance rover usage across goals and because it is the most efficient candidate for this goal (lowest energy_required and shortest distance)."
+    },
+    {
+      "goal_id": "SG1",
+      "description": "Collect subsurface samples from rocky terrain near nodes N12, N45, and N78.",
+      "priority": "medium",
+      "terrain": "rocky",
+      "target_nodes": ["N12", "N45", "N78"],
+      "selected_rover": {
+        "rover_id": "rover_4",
+        "path": ["N16", "N64", "N8", "N12", "N99", "N63", "N54", "N45", "N88", "N67", "N78", "N98", "N16"],
+        "distance": 187.0,
+        "energy_required": 18.7,
+        "recharge_before": false,
+        "speed": 1.75,
+        "location": "N16"
+      },
+      "selection_reason": "Selected rover_4 for SG1 to avoid reusing rover_1 and rover_3 (already assigned to higher-priority goals) while still choosing an efficient rover among the valid candidates (low energy_required and competitive distance)."
+    }
+  ],
+  "failures": []
+}

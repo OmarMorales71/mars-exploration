@@ -1,0 +1,56 @@
+{
+  "assignments": [
+    {
+      "goal_id": "SG2",
+      "description": "Analyze ice composition in icy terrain at nodes N22 and N23.",
+      "priority": "high",
+      "terrain": "icy",
+      "target_nodes": ["N22", "N23"],
+      "selected_drone": {
+        "drone_id": "drone_0",
+        "path": ["N8", "N64", "N59", "N22", "N30", "N23", "N59", "N64", "N8"],
+        "distance": 8.0,
+        "time_required": 8.0,
+        "location": "N8",
+        "altitude": 402.0,
+        "camera_resolution": "20MP"
+      },
+      "selection_reason": "Drone_0 was selected for this high-priority goal to balance drone usage while providing the best sensing capability, as it offers the highest camera resolution and altitude among candidates with comparable flight time."
+    },
+    {
+      "goal_id": "SG4",
+      "description": "Measure radiation levels in sandy terrain at node N90.",
+      "priority": "high",
+      "terrain": "sandy",
+      "target_nodes": ["N90"],
+      "selected_drone": {
+        "drone_id": "drone_2",
+        "path": ["N24", "N1", "N90", "N1", "N24"],
+        "distance": 4.0,
+        "time_required": 4.0,
+        "location": "N24",
+        "altitude": 131.0,
+        "camera_resolution": "15MP"
+      },
+      "selection_reason": "Drone_2 was chosen to avoid reusing drone_0 and to efficiently complete the task with minimal flight time while still providing adequate sensing capability."
+    },
+    {
+      "goal_id": "SG3",
+      "description": "Capture panoramic images of crater terrain at node N5.",
+      "priority": "low",
+      "terrain": "crater",
+      "target_nodes": ["N5"],
+      "selected_drone": {
+        "drone_id": "drone_3",
+        "path": ["N74", "N63", "N53", "N34", "N5", "N34", "N53", "N63", "N74"],
+        "distance": 8.0,
+        "time_required": 8.0,
+        "location": "N74",
+        "altitude": 285.0,
+        "camera_resolution": "15MP"
+      },
+      "selection_reason": "Drone_3 was selected for this lower-priority goal to balance assignments across the fleet while providing sufficient altitude and camera resolution for panoramic imaging."
+    }
+  ],
+  "failures": []
+}

@@ -65,7 +65,6 @@ class RoverCrew:
         return Agent(
             config=self.agents_config["rover_assignment_selector"],
             llm=get_llm(),
-            max_iter=20,
             tools=[SplitGoalsTool()]
         )
     

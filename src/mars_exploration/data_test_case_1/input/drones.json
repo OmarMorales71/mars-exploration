@@ -1,0 +1,37 @@
+[
+  {
+    "id": "drone_0",
+    "location": "N8",
+    "range": 28,
+    "altitude": 402,
+    "camera_resolution": "20MP"
+  },
+  {
+    "id": "drone_1",
+    "location": "N3",
+    "range": 28,
+    "altitude": 214,
+    "camera_resolution": "12MP"
+  },
+  {
+    "id": "drone_2",
+    "location": "N24",
+    "range": 19,
+    "altitude": 131,
+    "camera_resolution": "15MP"
+  },
+  {
+    "id": "drone_3",
+    "location": "N74",
+    "range": 11,
+    "altitude": 285,
+    "camera_resolution": "15MP"
+  },
+  {
+    "id": "drone_4",
+    "location": "N52",
+    "range": 14,
+    "altitude": 176,
+    "camera_resolution": "12MP"
+  }
+]

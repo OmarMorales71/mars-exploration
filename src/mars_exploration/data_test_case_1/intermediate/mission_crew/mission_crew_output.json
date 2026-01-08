@@ -1,6 +1,6 @@
 {
-    "mission_title": "Mars Mission",
-    "mission_description": "Planetary exploration mission to Mars.",
+    "mission_title": "Mars Mission Report",
+    "mission_description": "The Mars mission aims to collect scientific data from various terrain types on the Martian surface.",
     "scientific_goals": [
         {
             "goal_id": "SG1",

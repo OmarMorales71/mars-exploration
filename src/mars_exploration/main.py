@@ -97,7 +97,7 @@ class MarsMissionFlow(Flow[MarsMissionState]):
     def plan_drone_operations(self):
         print(f"Planning drone operations")
         result = (
-            DroneCrew(mapp=self.state.mars_map_path, drones=self.state.drones, output_dir=INTERMEDIATE_DIR)
+            DroneCrew(mapp=self.state.mars_map_path, drones=self.state.drones, output_dir=os.path.join(INTERMEDIATE_DIR, "drone_crew"))
             .crew()
             .kickoff(inputs={
                 "mission_summary": self.state.mission_summary.model_dump_json()          
