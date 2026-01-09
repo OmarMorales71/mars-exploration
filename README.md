@@ -92,7 +92,21 @@ Required input files (in `data/input/`):
 
 ---
 
-### 3️⃣ Run the system
+### 3️⃣ Provide LLM 
+
+Create a .env file and provide your LLM information.
+
+Example 
+
+```bash
+LLM_PROVIDER=ollama
+LLM_BASE_URL=http://localhost:11434
+LLM_MODEL=llama3.1
+```
+
+If your LLM information is equal, you can skip this step because these are the default values. 
+
+### 4️⃣ Run the system
 
 ```bash
 crewai run

@@ -8,7 +8,7 @@ def get_llm() -> LLM:
 
     if _llm_instance is None:
         provider = os.getenv("LLM_PROVIDER", "ollama")
-        model = os.getenv("LLM_MODEL", "llama3.1")
+        model = os.getenv("LLM_MODEL", "llama3.1:70b")
         base_url = os.getenv("LLM_BASE_URL", "http://localhost:11434")
 
         _llm_instance = LLM(

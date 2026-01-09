@@ -117,12 +117,10 @@ class RoversPathTool(BaseTool):
         Output:
         - List[dict], one per goal, each containing candidates and no_candidates.
         """
-        print("USING TOOL")
         prohibited_nodes = prohibited_nodes or []
         prohibited_set: Set[str] = set(str(n).strip() for n in prohibited_nodes if str(n).strip())
 
         base_graph = nx.read_graphml(self.mars_map)
-        print("USING TOOL 2")
         if prohibited_set:
             graph = base_graph.copy()
             # Remove only nodes that actually exist in the graph
@@ -281,6 +279,10 @@ class RoversPathTool(BaseTool):
                         location=source
                     )
                 )
+            
+            if goal_out.candidates:
+                goal_out.no_candidates.clear()
+            print("Rover TOOL GOOD")
 
             results.append(goal_out)
 

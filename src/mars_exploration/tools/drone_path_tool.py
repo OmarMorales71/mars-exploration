@@ -218,6 +218,9 @@ class DronesPathTool(BaseTool):
                     )
                 )
 
+            if out.candidates:
+                out.no_candidates.clear()
+            print("DRONE TOOL GOOD")
             results.append(out)
 
         return results

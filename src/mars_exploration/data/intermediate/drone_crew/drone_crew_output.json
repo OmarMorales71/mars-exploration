@@ -1,0 +1,55 @@
+{
+    "assignments": [
+        {
+            "goal_id": "SG4",
+            "description": "Measure radiation levels in sandy terrain at node N90.",
+            "priority": "high",
+            "terrain": "sandy",
+            "target_nodes": [
+                "N90"
+            ],
+            "selected_drone": {
+                "drone_id": "drone_0",
+                "path": [
+                    "N8",
+                    "N43",
+                    "N90",
+                    "N43",
+                    "N8"
+                ],
+                "distance": 4.0,
+                "time_required": 4.0,
+                "location": "N8",
+                "altitude": 402.0,
+                "camera_resolution": "20MP"
+            },
+            "selection_reason": "Selected drone_0 for SG4 as it is the first candidate and has lowest current usage count, highest camera resolution (20MP), and highest altitude (402.0)"
+        },
+        {
+            "goal_id": "SG3",
+            "description": "Capture panoramic images of crater terrain at node N5.",
+            "priority": "low",
+            "terrain": "crater",
+            "target_nodes": [
+                "N5"
+            ],
+            "selected_drone": {
+                "drone_id": "drone_2",
+                "path": [
+                    "N24",
+                    "N29",
+                    "N5",
+                    "N29",
+                    "N24"
+                ],
+                "distance": 4.0,
+                "time_required": 4.0,
+                "location": "N24",
+                "altitude": 131.0,
+                "camera_resolution": "15MP"
+            },
+            "selection_reason": "Selected drone_2 for SG3 as it is the first candidate and has lowest current usage count, highest camera resolution (15MP), and highest altitude (131.0)"
+        }
+    ],
+    "failures": []
+}

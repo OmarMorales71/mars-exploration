@@ -15,7 +15,6 @@ class SplitGoalsTool(BaseTool):
         "No other logic."
     )
 
-    # IMPORTANT: keep args as plain builtins to avoid schema issues
     def _run(self, possible_assignments: list) -> Dict[str, Any]:
         assignments = []
         failures = []
