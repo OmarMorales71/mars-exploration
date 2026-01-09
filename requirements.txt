@@ -1,0 +1,3 @@
+crewai[tools]==0.165.1
+networkx
+ollama
