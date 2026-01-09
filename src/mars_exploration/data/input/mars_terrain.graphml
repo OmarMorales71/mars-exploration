@@ -390,6 +390,10 @@
   <data key="d1">9.6</data>
   <data key="d2">13.0</data>
 </edge>
+<edge source="N3" target="N52">
+  <data key="d1">12.67</data>
+  <data key="d2">10.45</data>
+</edge>
 <edge source="N3" target="N57">
   <data key="d1">13.99</data>
   <data key="d2">13.74</data>
@@ -502,6 +506,10 @@
   <data key="d1">8.37</data>
   <data key="d2">10.05</data>
 </edge>
+<edge source="N10" target="N52">
+  <data key="d1">19.53</data>
+  <data key="d2">28.83</data>
+</edge>
 <edge source="N10" target="N70">
   <data key="d1">19.59</data>
   <data key="d2">18.7</data>
@@ -553,6 +561,10 @@
 <edge source="N14" target="N33">
   <data key="d1">15.59</data>
   <data key="d2">18.04</data>
+</edge>
+<edge source="N14" target="N52">
+  <data key="d1">16.53</data>
+  <data key="d2">16.35</data>
 </edge>
 <edge source="N15" target="N17">
   <data key="d1">7.62</data>
@@ -1082,6 +1094,22 @@
   <data key="d1">16.45</data>
   <data key="d2">21.55</data>
 </edge>
+<edge source="N52" target="N63">
+  <data key="d1">18.81</data>
+  <data key="d2">26.89</data>
+</edge>
+<edge source="N52" target="N79">
+  <data key="d1">9.44</data>
+  <data key="d2">10.1</data>
+</edge>
+<edge source="N52" target="N81">
+  <data key="d1">15.21</data>
+  <data key="d2">15.43</data>
+</edge>
+<edge source="N52" target="N96">
+  <data key="d1">8.62</data>
+  <data key="d2">12.92</data>
+</edge>
 <edge source="N53" target="N63">
   <data key="d1">6.17</data>
   <data key="d2">8.67</data>
@@ -1146,7 +1174,10 @@
   <data key="d1">10.69</data>
   <data key="d2">10.09</data>
 </edge>
-
+<edge source="N63" target="N74">
+  <data key="d1">11.83</data>
+  <data key="d2">9.98</data>
+</edge>
 <edge source="N63" target="N81">
   <data key="d1">8.67</data>
   <data key="d2">12.94</data>
