@@ -36,7 +36,7 @@ compute_possible_rover_assignments:
     Constrain: 
     The rovers_path_tool must be called just once. 
 
-    Your job: compute rover candidates for every goal by calling rovers_path_tool ONCE.
+    Your job: compute rover candidates and no_candidates for every goal by calling rovers_path_tool ONCE.
 
     Tool call rules (must follow exactly):
     1) Build "goals" by copying ALL items from context.rover_goals into a list of dicts with keys:
@@ -46,8 +46,8 @@ compute_possible_rover_assignments:
          Example hazard: "Node N60: ..." -> prohibited_nodes=["N60"].
        - If you cannot extract any node ids, OMIT prohibited_nodes in the tool call.
     3) energy_threshold:
-       - If constraints include "recharge if energy drops below X%", set energy_threshold=X (number).
-       - Otherwise OMIT energy_threshold in the tool call or pass 5.0 as default.
+       - If constraints include "recharge if energy drops below X%" or similar, set energy_threshold=X (number).
+       - Otherwise OMIT energy_threshold in the tool call or pass 0.0 as default.
     4) energy_cost:
        - Only include energy_cost if the context explicitly gives an energy cost per movement.
        - Otherwise OMIT energy_cost in the tool call or pass 0.2 as default.

@@ -117,12 +117,12 @@ class RoversPathTool(BaseTool):
         Output:
         - List[dict], one per goal, each containing candidates and no_candidates.
         """
-
+        print("USING TOOL")
         prohibited_nodes = prohibited_nodes or []
         prohibited_set: Set[str] = set(str(n).strip() for n in prohibited_nodes if str(n).strip())
 
         base_graph = nx.read_graphml(self.mars_map)
-
+        print("USING TOOL 2")
         if prohibited_set:
             graph = base_graph.copy()
             # Remove only nodes that actually exist in the graph
@@ -260,6 +260,15 @@ class RoversPathTool(BaseTool):
 
                 rover_energy = float(rover.get("energy", 0.0))
                 recharge_before = (rover_energy - energy_required) <= float(energy_threshold)
+
+                if not source:
+                    goal_out.no_candidates.append(
+                        RoverRejection(
+                            rover_id=rover_id,
+                            reason=f"no path for chained route to targets {target_nodes} and return",
+                        )
+                    )
+                    continue
 
                 goal_out.candidates.append(
                     RoverCandidate(

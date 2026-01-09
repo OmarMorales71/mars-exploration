@@ -113,7 +113,7 @@ class MarsMissionFlow(Flow[MarsMissionState]):
         print("Integrating final mission plan")
 
         result = (
-            IntegrationCrew(output_dir=os.path.join(OUTPUT_DIR, "integration"))
+            IntegrationCrew(output_dir=os.path.join(INTERMEDIATE_DIR, "integration"))
             .crew()
             .kickoff(inputs={
                 "mission_summary": self.state.mission_summary.model_dump(),

@@ -1,0 +1,29 @@
+{
+  "assignments": [],
+  "failures": [
+    {
+      "goal_id": "2",
+      "description": "Survey potential subsurface water traces in icy terrain at nodes N41 and N42.",
+      "priority": "high",
+      "terrain": "icy",
+      "target_nodes": ["N41", "N42"],
+      "reason": "No rover can complete this goal: all rovers are terrain-incompatible with 'icy' (rover_0, rover_1, rover_2, rover_3, rover_4)."
+    },
+    {
+      "goal_id": "4",
+      "description": "Monitor atmospheric dust density in sandy terrain at node N18.",
+      "priority": "high",
+      "terrain": "sandy",
+      "target_nodes": ["N18"],
+      "reason": "No rover can complete this goal: rover_0 and rover_1 have no path to reach N18 and return; rover_2, rover_3, and rover_4 are terrain-incompatible with 'sandy'."
+    },
+    {
+      "goal_id": "1",
+      "description": "Investigate mineral composition in rocky terrain near nodes N14 and N27.",
+      "priority": "medium",
+      "terrain": "rocky",
+      "target_nodes": ["N14", "N27"],
+      "reason": "No rover can complete this goal: rover_0 and rover_1 have no path to reach N14/N27 and return; rover_2, rover_3, and rover_4 are terrain-incompatible with 'rocky'."
+    }
+  ]
+}

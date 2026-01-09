@@ -16,7 +16,7 @@ integrate_mission_plans:
     - rover_plan: {rover_plan}
     - drone_plan: {drone_plan}
 
-    Mission strategy section must explain in detail how each goal is completed. Each movement, activity and coordination based on rover_plan and drone_plan must be explain here. 
+    Mission strategy section must explain in detail how each goal is completed. Each movement, activity and coordination based on rover_plan and drone_plan must be explain here. Use the most information you can from drone_plan and rover_plan but as plain text for human.
     Mission strategy is the most important section and must be the biggest one with the most of details.
   expected_output: >
     A unified mission strategy written in clear, human-readable Markdown. The output
