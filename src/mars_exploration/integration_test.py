@@ -6,7 +6,7 @@ from pathlib import Path
 from mars_exploration.crews.integration_crew.integration_crew import IntegrationCrew
 
 # Paths (adjust if needed)
-INTERMEDIATE_DIR = "src/mars_exploration/data_test_case_2/intermediate"
+INTERMEDIATE_DIR = "src/mars_exploration/data_test_case_3/intermediate"
 
 MISSION_SUMMARY_JSON = os.path.join(INTERMEDIATE_DIR, "mission_crew", "mission_crew_output.json")
 ROVER_PLAN_JSON = os.path.join(INTERMEDIATE_DIR, "rover_crew", "rover_crew_output.json")

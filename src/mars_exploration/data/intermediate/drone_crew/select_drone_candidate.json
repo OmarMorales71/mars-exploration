@@ -1,38 +1,21 @@
 {
-  "assignments": [
+  "assignments": [],
+  "failures": [
     {
       "goal_id": "4",
       "description": "Monitor atmospheric dust density in sandy terrain at node N18.",
       "priority": "high",
       "terrain": "sandy",
       "target_nodes": ["N18"],
-      "selected_drone": {
-        "drone_id": "drone_0",
-        "path": ["N8", "N70", "N92", "N18", "N92", "N70", "N8"],
-        "distance": 6.0,
-        "time_required": 6.0,
-        "location": "N8",
-        "altitude": 402.0,
-        "camera_resolution": "20MP"
-      },
-      "selection_reason": "Drone_0 was selected because it offers the highest camera resolution and altitude among efficient candidates, while maintaining a short flight time and helping balance drone usage."
+      "reason": "All drones exceeded flight-time limits or had no valid path to the target."
     },
     {
       "goal_id": "1",
-      "description": "Investigate mineral composition in rocky terrain near nodes N14 and N27.",
+      "description": "Conduct mineral spectroscopy in rocky terrain near nodes N14 and N27.",
       "priority": "medium",
       "terrain": "rocky",
       "target_nodes": ["N14", "N27"],
-      "selected_drone": {
-        "drone_id": "drone_4",
-        "path": ["N52", "N14", "N13", "N18", "N92", "N27", "N53", "N63", "N52"],
-        "distance": 8.0,
-        "time_required": 8.0,
-        "location": "N52",
-        "altitude": 176.0,
-        "camera_resolution": "12MP"
-      },
-      "selection_reason": "Drone_4 was chosen to balance drone assignments across goals with efficient flight path with acceptable time requirements."
+      "reason": "All drones exceeded flight-time limits or could not find a feasible route covering both target nodes."
     },
     {
       "goal_id": "3",
@@ -40,17 +23,7 @@
       "priority": "low",
       "terrain": "crater",
       "target_nodes": ["N66"],
-      "selected_drone": {
-        "drone_id": "drone_3",
-        "path": ["N74", "N63", "N53", "N66", "N53", "N63", "N74"],
-        "distance": 6.0,
-        "time_required": 6.0,
-        "location": "N74",
-        "altitude": 285.0,
-        "camera_resolution": "15MP"
-      },
-      "selection_reason": "Drone_3 was assigned to maintain balanced utilization across the goals with adequate imaging quality and a feasible flight duration."
+      "reason": "No drone could reach the target within flight-time limits or find a valid path."
     }
-  ],
-  "failures": []
+  ]
 }

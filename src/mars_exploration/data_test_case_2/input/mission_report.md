@@ -1,4 +1,3 @@
-Here’s a **different Mars mission report** with new goals, nodes, priorities, and hazards, but the **same structure**, so you can use it directly to test your pipeline.
 
 ---
 
@@ -46,9 +45,3 @@ Here’s a **different Mars mission report** with new goals, nodes, priorities, 
 * **Node N58**: persistent dust storm activity
 
 ---
-
-If you want, next I can:
-
-* Produce an **edge-case report** (missing priorities, vague terrain),
-* Generate a **drone-only** or **rover-only** mission,
-* Or create a **stress-test report** designed to break assumptions in your crews.

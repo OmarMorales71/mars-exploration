@@ -1,29 +1,56 @@
 {
-  "assignments": [],
-  "failures": [
-    {
-      "goal_id": "2",
-      "description": "Survey potential subsurface water traces in icy terrain at nodes N41 and N42.",
-      "priority": "high",
-      "terrain": "icy",
-      "target_nodes": ["N41", "N42"],
-      "reason": "No rover can complete this goal: all rovers are terrain-incompatible with 'icy' (rover_0, rover_1, rover_2, rover_3, rover_4)."
-    },
-    {
-      "goal_id": "4",
-      "description": "Monitor atmospheric dust density in sandy terrain at node N18.",
-      "priority": "high",
-      "terrain": "sandy",
-      "target_nodes": ["N18"],
-      "reason": "No rover can complete this goal: rover_0 and rover_1 have no path to reach N18 and return; rover_2, rover_3, and rover_4 are terrain-incompatible with 'sandy'."
-    },
-    {
-      "goal_id": "1",
-      "description": "Investigate mineral composition in rocky terrain near nodes N14 and N27.",
-      "priority": "medium",
-      "terrain": "rocky",
-      "target_nodes": ["N14", "N27"],
-      "reason": "No rover can complete this goal: rover_0 and rover_1 have no path to reach N14/N27 and return; rover_2, rover_3, and rover_4 are terrain-incompatible with 'rocky'."
-    }
-  ]
+"assignments": [
+{
+"goal_id": "2",
+"description": "Survey subsurface water traces in icy terrain at nodes N41 and N42.",
+"priority": "high",
+"terrain": "icy",
+"target_nodes": ["N41", "N42"],
+"selected_rover": {
+"rover_id": "rover_2",
+"path": ["N43", "N61", "N54", "N41", "N54", "N42", "N54", "N61", "N43"],
+"distance": 119.0,
+"energy_required": 23.8,
+"recharge_before": false,
+"speed": 2.64,
+"location": "N43"
+},
+"selection_reason": "Selected rover_2. It is terrain-compatible and more efficient (lower distance and energy_required)."
+},
+{
+"goal_id": "4",
+"description": "Monitor atmospheric dust density in sandy terrain at node N18.",
+"priority": "high",
+"terrain": "sandy",
+"target_nodes": ["N18"],
+"selected_rover": {
+"rover_id": "rover_1",
+"path": ["N16", "N90", "N18", "N90", "N16"],
+"distance": 55.0,
+"energy_required": 11.0,
+"recharge_before": false,
+"speed": 2.45,
+"location": "N16"
+},
+"selection_reason": "Selected rover_1 to balance rover usage across the goals (avoiding reuse of rover_2). Lowest distance and energy_required among available options."
+},
+{
+"goal_id": "1",
+"description": "Conduct mineral spectroscopy in rocky terrain near nodes N14 and N27.",
+"priority": "medium",
+"terrain": "rocky",
+"target_nodes": ["N14", "N27"],
+"selected_rover": {
+"rover_id": "rover_4",
+"path": ["N16", "N14", "N15", "N28", "N53", "N27", "N92", "N18", "N90", "N16"],
+"distance": 137.0,
+"energy_required": 27.400000000000002,
+"recharge_before": false,
+"speed": 1.75,
+"location": "N16"
+},
+"selection_reason": "Selected rover_4 to keep rover assignments distributed."
+}
+],
+"failures": []
 }
